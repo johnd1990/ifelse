@@ -19,30 +19,23 @@ console.log("Is Truthy:")
 console.log("");
 
 function checkTruthy(inputValue) {
+    const falsyValues = [false, null, undefined, 0, ""];
     console.log("Input: " + inputValue);
+
     if (inputValue) {
         console.log("Output: true");
-    } else if (inputValue === false) {
-        console.log("Output: The boolean value false is falsy");
-    } else if (inputValue === null) {
-        console.log("Output: The null value is falsy");
-    } else if (inputValue === undefined) {
-        console.log("Output: undefined is falsy");
-    } else if (inputValue === 0) {
-        console.log("Output: The number 0 is falsy (the only falsy number)");
-    } else if (inputValue === "") {
-        console.log("Output: The empty string is falsy (the only falsy string)");
+    } else if (falsyValues.includes(inputValue)) {
+        console.log("Output: The " + typeof inputValue + " " + inputValue + " is falsy");
     }
 }
 
 // Test cases
 checkTruthy("I am a string"); // true
-checkTruthy(false); // "The boolean value false is falsy"
-checkTruthy(null); // "The null value is falsy"
-checkTruthy(undefined); // "undefined is falsy"
-checkTruthy(0); // "The number 0 is falsy (the only falsy number)"
-checkTruthy(""); // "The empty string is falsy (the only falsy string)"
-
+checkTruthy(false); // "Output: The boolean false is falsy"
+checkTruthy(null); // "Output: The object null is falsy"
+checkTruthy(undefined); // "Output: The undefined is falsy"
+checkTruthy(0); // "Output: The number 0 is falsy"
+checkTruthy(""); // "Output: The string  is falsy"
 
 /*
 Number Line Pseudocode:
@@ -65,19 +58,39 @@ console.log("******************************************************")
 console.log("Number Line:")
 console.log("");
 
+// Old function:
+// function checkSum(num1, num2) {
+//     let sum = num1 + num2;
+//     console.log("Checking sum of " + num1 + " and " + num2 + "...");
+//     if (sum > 100) {
+//         console.log(sum + " is greater than 100\n");
+//     } else if (sum > 0) {
+//         console.log(sum + " is larger than 0\n");
+//     } else if (sum == 0) {
+//         console.log(sum + " is equal to 0\n");
+//     } else if (sum < -1000) {
+//         console.log(sum + " is less than -1000\n");
+//     } else {
+//         console.log(sum + " is a negative number\n");
+//     }
+// }
+
+// New function using arrays:
 function checkSum(num1, num2) {
     let sum = num1 + num2;
-    console.log("Checking sum of " + num1 + " and " + num2 + "...");
-    if (sum > 100) {
-        console.log(sum + " is greater than 100\n");
-    } else if (sum > 0) {
-        console.log(sum + " is larger than 0\n");
-    } else if (sum == 0) {
-        console.log(sum + " is equal to 0\n");
-    } else if (sum < -1000) {
-        console.log(sum + " is less than -1000\n");
-    } else {
-        console.log(sum + " is a negative number\n");
+    const conditions = [
+        { value: sum > 100, message: sum + " is greater than 100" },
+        { value: sum > 0 && sum <= 100, message: sum + " is larger than 0" },
+        { value: sum == 0, message: sum + " is equal to 0" },
+        { value: sum < -1000, message: sum + " is less than -1000" },
+        { value: sum <= 0 && sum > -1000, message: sum + " is a negative number" },
+    ];
+    console.log(`Checking sum of ${num1} and ${num2}...`);
+    for (let i = 0; i < conditions.length; i++) {
+        if (conditions[i].value) {
+            console.log(conditions[i].message + "\n");
+            break;
+        }
     }
 }
 
@@ -107,20 +120,38 @@ console.log("******************************************************")
 console.log("Greater Than Or Equal To 5:")
 console.log("");
 
-function checkGreaterEqual5(a, b) {
-    if (a >= 5 && b >= 5) {
-        console.log(a + " and " + b + " are both greater or equal to 5: true");
-    } else {
-        console.log(a + " and " + b + " are not both greater or equal to 5: false");
-    }
+// Old Function:
+// function checkGreaterEqual5(a, b) {
+//     if (a >= 5 && b >= 5) {
+//         console.log(a + " and " + b + " are both greater or equal to 5: true");
+//     } else {
+//         console.log(a + " and " + b + " are not both greater or equal to 5: false");
+//     }
+// }
+
+// checkGreaterEqual5(5, 6);
+// checkGreaterEqual5(10, 11);
+// checkGreaterEqual5(0, 0);
+// checkGreaterEqual5(1000, -1000);
+// checkGreaterEqual5(6, 4);
+// checkGreaterEqual5(5, 5);
+
+// New function using arrays:
+function checkGreaterEqual5(pair) {
+    const result = pair.every(num => num >= 5);
+    console.log(`${pair[0]} and ${pair[1]} are ${result ? 'both' : 'not both'} greater or equal to 5: ${result}`);
 }
 
-checkGreaterEqual5(5, 6);
-checkGreaterEqual5(10, 11);
-checkGreaterEqual5(0, 0);
-checkGreaterEqual5(1000, -1000);
-checkGreaterEqual5(6, 4);
-checkGreaterEqual5(5, 5);
+const pairs = [
+    [5, 6],
+    [10, 11],
+    [0, 0],
+    [1000, -1000],
+    [6, 4],
+    [5, 5]
+];
+
+pairs.forEach(pair => checkGreaterEqual5(pair));
 
 console.log("******************************************************")
 console.log("Pair and Compare:")
@@ -142,9 +173,30 @@ Pair and Compare Pseudocode:
     Print false.
     Call the comparePairs function with different sets of parameters.
 */
-function comparePairs(param1A, param1B, param2A, param2B) {
-    console.log(`Comparing (${param1A}, ${param1B}) and (${param2A}, ${param2B})`);
-    if (param1A && param1B || param2A && param2B) {
+
+// Old Function:
+// function comparePairs(param1A, param1B, param2A, param2B) {
+//     console.log(`Comparing (${param1A}, ${param1B}) and (${param2A}, ${param2B})`);
+//     if (param1A && param1B || param2A && param2B) {
+//         console.log(true);
+//     } else {
+//         console.log(false);
+//     }
+//     console.log('\n');
+// }
+
+// // Test cases
+// comparePairs("cat", "cat", 6, "6"); // true
+// comparePairs("five", 5, "dog", "dawg"); // false
+// comparePairs(0, false, "horse", "horse"); // true
+// comparePairs("eight", "eight", "ate", "ate"); // true
+// comparePairs(11, "eleven", "four", "for"); // false
+// comparePairs("cake", "cake", "pie", "pie"); // true
+
+// New function using arrays:
+function comparePairs(pair1, pair2) {
+    console.log(`Comparing (${pair1[0]}, ${pair1[1]}) and (${pair2[0]}, ${pair2[1]})`);
+    if (pair1[0] === pair2[0] && pair1[1] === pair2[1]) {
         console.log(true);
     } else {
         console.log(false);
@@ -153,11 +205,11 @@ function comparePairs(param1A, param1B, param2A, param2B) {
 }
 
 // Test cases
-comparePairs("cat", "cat", 6, "6"); // true
-comparePairs("five", 5, "dog", "dawg"); // false
-comparePairs(0, false, "horse", "horse"); // true
-comparePairs("eight", "eight", "ate", "ate"); // true
-comparePairs(11, "eleven", "four", "for"); // false
-comparePairs("cake", "cake", "pie", "pie"); // true
+comparePairs(["cat", "cat"], [6, "6"]); // false
+comparePairs(["five", 5], ["dog", "dawg"]); // false
+comparePairs([0, false], ["horse", "horse"]); // false
+comparePairs(["eight", "eight"], ["ate", "ate"]); // true
+comparePairs([11, "eleven"], ["four", "for"]); // false
+comparePairs(["cake", "cake"], ["pie", "pie"]); // false
 
 console.log("******************************************************")
